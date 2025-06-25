@@ -15,6 +15,8 @@ import SignIn from './components/SignIn';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
+import DashboardOverview from './components/DashboardOverview';
+import DonationDrives from './components/DonationDrives';
 import theme from './theme';
 
 // Static authentication - In a real app, this would be handled by a backend
@@ -110,13 +112,16 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/dashboard/*"
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard onLogout={() => setIsAuthenticated(false)} />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<DashboardOverview />} />
+            <Route path="donation-drives" element={<DonationDrives />} />
+          </Route>
         </Routes>
       </Box>
     </ThemeProvider>
