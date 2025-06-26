@@ -1,321 +1,221 @@
 import { useState } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Button,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Drawer,
-  Divider,
-} from '@mui/material';
-import {
-  Dashboard as DashboardIcon,
-  Bloodtype,
-  Event,
-  History,
-  Message,
-  Notifications,
-  Warning,
-  Settings,
-  Menu as MenuIcon,
-  ChevronRight,
-} from '@mui/icons-material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, useLocation } from 'react-router-dom';
+import BloodRequests from './BloodRequests';
+import CreateBloodRequest from './CreateBloodRequest';
+import DonationDrives from './DonationDrives';
+import Notifications from './Notifications';
 
-const drawerWidth = 240;
-
-function Dashboard({ onLogout }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
-
+function Dashboard({ onSignOut }) {
+  const location = useLocation();
   const menuItems = [
-    { text: 'Overview', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Blood Requests', icon: <Bloodtype />, path: '/blood-requests' },
-    { text: 'Donation Drives', icon: <Event />, path: '/donation-drives' },
-    { text: 'Donation History', icon: <History />, path: '/donation-history' },
-    { text: 'Messages', icon: <Message />, path: '/messages' },
-    { text: 'Notifications', icon: <Notifications />, path: '/notifications' },
-    { text: 'Emergency', icon: <Warning />, path: '/emergency' },
-    { text: 'Settings', icon: <Settings />, path: '/settings' },
+    { name: 'Overview', href: '', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+      </svg>
+    )},
+    { name: 'Blood Requests', href: 'blood-requests', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+      </svg>
+    )},
+    { name: 'Donation Drives', href: 'donation-drives', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+      </svg>
+    )},
+    { name: 'Donation History', href: 'donation-history', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+        <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+      </svg>
+    )},
+    { name: 'Messages', href: 'messages', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+      </svg>
+    )},
+    { name: 'Notifications', href: 'notifications', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+      </svg>
+    )},
+    { name: 'Emergency', href: 'emergency', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+      </svg>
+    )},
+    { name: 'Settings', href: 'settings', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+      </svg>
+    )}
   ];
 
-  const drawer = (
-    <Box sx={{ height: '100%', bgcolor: '#fff' }}>
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" color="primary" sx={{ fontWeight: 500 }}>
-          RedWeb
-        </Typography>
-      </Box>
-      <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              component={RouterLink}
-              to={item.path}
-              sx={{
-                py: 1.5,
-                '&:hover': {
-                  bgcolor: 'rgba(211, 47, 47, 0.04)',
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: 'text.secondary', minWidth: 40 }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.text}
-                primaryTypographyProps={{
-                  fontSize: 14,
-                  fontWeight: 500
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          bgcolor: 'white',
-          color: 'text.primary',
-          boxShadow: 'none',
-          borderBottom: '1px solid #e0e0e0',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-64 bg-white min-h-screen border-r border-gray-200">
+          <div className="p-4">
+            <Link to="dashboard" className="text-2xl font-bold text-[#f84444]">RedWeb</Link>
+          </div>
+          <nav className="mt-4">
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              >
+                <span className="text-gray-500">{item.icon}</span>
+                <span className="ml-3 text-sm font-medium">{item.name}</span>
+              </Link>
+            ))}
+          </nav>
+
+          <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200">
+            <Link to="help" className="block text-sm text-gray-600 hover:text-gray-900">
+              Need Help?
+            </Link>
+            <p className="mt-1 text-xs text-gray-500">
+              Contact our support team for assistance with the platform.
+            </p>
+            <button
+              onClick={() => onSignOut()}
+              className="mt-4 text-sm text-gray-600 hover:text-gray-900"
             >
-              <MenuIcon />
-            </IconButton>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton size="small">
-                <Box
-                  component="img"
-                  src="https://via.placeholder.com/32"
-                  alt="Profile"
-                  sx={{ width: 32, height: 32, borderRadius: '50%' }}
-                />
-              </IconButton>
-              <Button
-                color="inherit"
-                onClick={onLogout}
-                sx={{ textTransform: 'none', color: 'text.secondary' }}
-              >
-                Logout
-              </Button>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+              Get Support
+            </button>
+          </div>
+        </div>
 
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-        }}
-      >
-        {drawer}
-      </Drawer>
-
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            borderRight: '1px solid #e0e0e0',
-          },
-        }}
-      >
-        {drawer}
-      </Drawer>
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          mt: 8,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Grid container spacing={3}>
-            {/* Blood Requests Card */}
-            <Grid item xs={12} md={4}>
-              <Paper
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  borderRadius: 2,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      Blood Requests
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      No active blood requests
-                    </Typography>
-                  </Box>
-                  <Bloodtype color="error" />
-                </Box>
-                <Typography variant="h3" sx={{ my: 2 }}>
-                  0
-                </Typography>
-                <Button
-                  variant="text"
-                  color="primary"
-                  endIcon={<ChevronRight />}
-                  sx={{ textTransform: 'none', p: 0 }}
+        {/* Main content */}
+        <div className="flex-1">
+          {/* Header */}
+          <header className="bg-white border-b border-gray-200 p-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <button className="text-gray-600 hover:text-gray-900">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Link 
+                  to="notifications"
+                  className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  title="Notifications"
                 >
-                  View all requests
-                </Button>
-              </Paper>
-            </Grid>
-
-            {/* Donation Drives Card */}
-            <Grid item xs={12} md={4}>
-              <Paper
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  borderRadius: 2,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      Donation Drives
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      No upcoming drives
-                    </Typography>
-                  </Box>
-                  <Event color="primary" />
-                </Box>
-                <Typography variant="h3" sx={{ my: 2 }}>
-                  0
-                </Typography>
-                <Button
-                  variant="text"
-                  color="primary"
-                  endIcon={<ChevronRight />}
-                  sx={{ textTransform: 'none', p: 0 }}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </Link>
+                <button
+                  onClick={onSignOut}
+                  className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-[#d63030] transition-colors duration-200"
                 >
-                  View all drives
-                </Button>
-              </Paper>
-            </Grid>
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </header>
 
-            {/* Emergency Requests Card */}
-            <Grid item xs={12} md={4}>
-              <Paper
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  borderRadius: 2,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      Emergency Requests
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      No emergency requests
-                    </Typography>
-                  </Box>
-                  <Warning color="error" />
-                </Box>
-                <Typography variant="h3" sx={{ my: 2 }}>
-                  0
-                </Typography>
-                <Button
-                  variant="text"
-                  color="primary"
-                  endIcon={<ChevronRight />}
-                  sx={{ textTransform: 'none', p: 0 }}
-                >
-                  View emergencies
-                </Button>
-              </Paper>
-            </Grid>
+          {/* Routes */}
+          <Routes>
+            <Route index element={
+              <main className="p-6">
+                {/* Dashboard content */}
+                <div className="grid grid-cols-3 gap-6 mb-8">
+                  {/* Blood Requests Card */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold">Blood Requests</h2>
+                      <span className="text-[#f84444]">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">Your active requests</p>
+                    <div className="text-3xl font-bold mb-4">0</div>
+                    <p className="text-sm text-gray-500 mb-4">No active blood requests</p>
+                    <Link to="blood-requests" className="text-[#f84444] text-sm hover:text-red-700">
+                      View all requests →
+                    </Link>
+                  </div>
 
-            {/* Recent Blood Requests Section */}
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, borderRadius: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                  <Typography variant="h6">Recent Blood Requests</Typography>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    sx={{ textTransform: 'none', borderRadius: 1 }}
-                  >
-                    Create Request
-                  </Button>
-                </Box>
-                <Typography color="text.secondary" align="center" sx={{ py: 4 }}>
-                  No recent blood requests
-                </Typography>
-              </Paper>
-            </Grid>
+                  {/* Donation Drives Card */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold">Donation Drives</h2>
+                      <span className="text-[#f84444]">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">Upcoming drives</p>
+                    <div className="text-3xl font-bold mb-4">0</div>
+                    <p className="text-sm text-gray-500 mb-4">No upcoming donation drives</p>
+                    <Link to="donation-drives" className="text-[#f84444] text-sm hover:text-red-700">
+                      View all drives →
+                    </Link>
+                  </div>
 
-            {/* Upcoming Donation Drives Section */}
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, borderRadius: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                  <Typography variant="h6">Upcoming Donation Drives</Typography>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    sx={{ textTransform: 'none', borderRadius: 1 }}
-                  >
-                    Create Drive
-                  </Button>
-                </Box>
-                <Typography color="text.secondary" align="center" sx={{ py: 4 }}>
-                  No upcoming donation drives
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-    </Box>
+                  {/* Emergency Requests Card */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold">Emergency Requests</h2>
+                      <span className="text-[#f84444]">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">Urgent blood needs</p>
+                    <div className="text-3xl font-bold mb-4">0</div>
+                    <p className="text-sm text-gray-500 mb-4">No emergency requests</p>
+                    <Link to="emergency" className="text-[#f84444] text-sm hover:text-red-700">
+                      View emergencies →
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Recent Activity Sections */}
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Recent Blood Requests */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-lg font-semibold mb-4">Recent Blood Requests</h2>
+                    <p className="text-gray-500 text-sm mb-4">No recent blood requests</p>
+                    <Link to="blood-requests/new" className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-red-600 transition-colors inline-block">
+                      Create Request
+                    </Link>
+                  </div>
+
+                  {/* Upcoming Donation Drives */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-lg font-semibold mb-4">Upcoming Donation Drives</h2>
+                    <p className="text-gray-500 text-sm mb-4">No upcoming donation drives</p>
+                    <Link to="donation-drives/new" className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-red-600 transition-colors inline-block">
+                      Create Drive
+                    </Link>
+                  </div>
+                </div>
+              </main>
+            } />
+            <Route path="blood-requests" element={<BloodRequests />} />
+            <Route path="blood-requests/new" element={<CreateBloodRequest />} />
+            <Route path="donation-drives" element={<DonationDrives />} />
+            <Route path="donation-drives/new" element={<div>Create Drive</div>} />
+            <Route path="donation-history" element={<div>Donation History</div>} />
+            <Route path="messages" element={<div>Messages</div>} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="emergency" element={<div>Emergency</div>} />
+            <Route path="settings" element={<div>Settings</div>} />
+          </Routes>
+        </div>
+      </div>
+    </div>
   );
 }
 

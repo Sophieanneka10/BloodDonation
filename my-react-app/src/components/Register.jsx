@@ -1,22 +1,51 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Checkbox,
-  TextField,
-  Typography,
-  Paper,
-  MenuItem,
-  Link,
-} from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
-  const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    bloodType: '',
+    phoneNumber: '',
+    address: '',
+    healthConditions: '',
+    availableDays: [],
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    // In a real app, this would make an API call to register the user
+    navigate('/signin');
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError('');
+  };
+
+  const handleDayChange = (event) => {
+    const { name, checked } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      availableDays: checked
+        ? [...prev.availableDays, name]
+        : prev.availableDays.filter((day) => day !== name),
+    }));
+  };
+
   const daysOfWeek = [
     'Monday',
     'Tuesday',
@@ -27,190 +56,237 @@ function Register() {
     'Sunday',
   ];
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      fullName: data.get('fullName'),
-      email: data.get('email'),
-      phoneNumber: data.get('phoneNumber'),
-      bloodType: data.get('bloodType'),
-      password: data.get('password'),
-      confirmPassword: data.get('confirmPassword'),
-      address: data.get('address'),
-      healthConditions: data.get('healthConditions'),
-      availableDays: daysOfWeek.filter(day => data.get(day.toLowerCase())),
-    });
-  };
-
   return (
-    <Box component="main" sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-      <Container maxWidth="sm">
-        <Box
-          sx={{
-            py: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Paper
-            elevation={3}
-            sx={{
-              p: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%',
-            }}
-          >
-            <Typography component="h1" variant="h5" color="primary" gutterBottom>
-              RedWeb
-            </Typography>
-            <Typography component="h2" variant="h5" gutterBottom>
-              Create an Account
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Enter your information to register as a blood donor
-            </Typography>
+    <main className="min-h-screen bg-gray-50 py-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your account
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/signin" className="font-medium text-primary hover:text-primary-dark">
+            Sign in
+          </Link>
+        </p>
+      </div>
 
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="fullName"
-                    label="Full Name"
-                    name="fullName"
-                    autoComplete="name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="phoneNumber"
-                    label="Phone Number"
-                    name="phoneNumber"
-                    autoComplete="tel"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    required
-                    fullWidth
-                    id="bloodType"
-                    label="Blood Type"
-                    name="bloodType"
-                    defaultValue=""
-                  >
-                    {bloodTypes.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    type="password"
-                    id="confirmPassword"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    multiline
-                    rows={3}
-                    name="address"
-                    label="Address"
-                    id="address"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={3}
-                    name="healthConditions"
-                    label="Health Conditions (if any)"
-                    id="healthConditions"
-                    placeholder="List any health conditions that might affect your ability to donate blood"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Available Days for Donation
-                  </Typography>
-                  <FormGroup row>
-                    {daysOfWeek.map((day) => (
-                      <FormControlLabel
-                        key={day}
-                        control={
-                          <Checkbox
-                            name={day.toLowerCase()}
-                            sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
-                          />
-                        }
-                        label={day}
-                        sx={{ width: { xs: '50%', sm: '33.33%' } }}
-                      />
-                    ))}
-                  </FormGroup>
-                </Grid>
-              </Grid>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="rounded-md bg-red-50 p-4">
+                <div className="text-sm text-red-700">
+                  {error}
+                </div>
+              </div>
+            )}
 
-              <Button
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                  First Name
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    required
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                  Last Name
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  required
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="bloodType" className="block text-sm font-medium text-gray-700">
+                Blood Type
+              </label>
+              <div className="mt-1">
+                <select
+                  id="bloodType"
+                  name="bloodType"
+                  required
+                  value={formData.bloodType}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                >
+                  <option value="">Select blood type</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <div className="mt-1">
+                <textarea
+                  id="address"
+                  name="address"
+                  required
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Available Days for Donation
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {daysOfWeek.map((day) => (
+                  <div key={day} className="flex items-center">
+                    <input
+                      id={day}
+                      name={day}
+                      type="checkbox"
+                      checked={formData.availableDays.includes(day)}
+                      onChange={handleDayChange}
+                      className="h-4 w-4 text-[#f84444] focus:ring-[#f84444] border-gray-300 rounded"
+                    />
+                    <label htmlFor={day} className="ml-2 block text-sm text-gray-700">
+                      {day}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="healthConditions" className="block text-sm font-medium text-gray-700">
+                Health Conditions
+              </label>
+              <div className="mt-1">
+                <textarea
+                  id="healthConditions"
+                  name="healthConditions"
+                  rows={3}
+                  placeholder="List any health conditions or medications (optional)"
+                  value={formData.healthConditions}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
                 type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#f84444] hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
               >
-                Create Account
-              </Button>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary">
-                  Already have an account?{' '}
-                  <Link component={RouterLink} to="/signin" variant="body2" color="primary">
-                    Sign In
-                  </Link>
-                </Typography>
-              </Box>
-            </Box>
-          </Paper>
-        </Box>
-      </Container>
-    </Box>
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
   );
 }
 
