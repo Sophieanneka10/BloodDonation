@@ -4,6 +4,9 @@ import BloodRequests from './BloodRequests';
 import CreateBloodRequest from './CreateBloodRequest';
 import DonationDrives from './DonationDrives';
 import Notifications from './Notifications';
+import Emergency from './Emergency';
+import Messages from './Messages';
+import Settings from './Settings';
 
 function Dashboard({ onSignOut }) {
   const location = useLocation();
@@ -208,10 +211,10 @@ function Dashboard({ onSignOut }) {
             <Route path="donation-drives" element={<DonationDrives />} />
             <Route path="donation-drives/new" element={<div>Create Drive</div>} />
             <Route path="donation-history" element={<div>Donation History</div>} />
-            <Route path="messages" element={<div>Messages</div>} />
+            <Route path="messages" element={<Messages />} />
             <Route path="notifications" element={<Notifications />} />
-            <Route path="emergency" element={<div>Emergency</div>} />
-            <Route path="settings" element={<div>Settings</div>} />
+            <Route path="emergency" element={<Emergency />} />
+            <Route path="settings" element={<Settings />} />
           </Routes>
         </div>
       </div>
