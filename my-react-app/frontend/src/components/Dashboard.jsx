@@ -60,7 +60,7 @@ function Dashboard({ onSignOut }) {
         {/* Sidebar */}
         <div className="w-64 bg-white min-h-screen border-r border-gray-200">
           <div className="p-4">
-            <Link to="dashboard" className="text-2xl font-bold text-[#f84444]">RedWeb</Link>
+            <Link to="dashboard" className="text-2xl font-bold text-[#c70000]">RedWeb</Link>
           </div>
           <nav className="mt-4">
             {menuItems.map((item) => (
@@ -115,7 +115,7 @@ function Dashboard({ onSignOut }) {
                 </Link>
                 <button
                   onClick={onSignOut}
-                  className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-[#d63030] transition-colors duration-200"
+                  className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors duration-200"
                 >
                   Sign Out
                 </button>
@@ -127,27 +127,17 @@ function Dashboard({ onSignOut }) {
           <Routes>
             <Route index element={
               <main className="p-6">
-                {/* Hero Section */}
-                <div className="bg-[#f84444] text-white rounded-lg p-12 mb-8 relative overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <div className="max-w-2xl">
-                      <h1 className="text-5xl font-bold mb-4">
-                        Connecting Blood Donors with Lives to Save
-                      </h1>
-                      <p className="text-lg mb-6">
-                        RedWeb creates a powerful network between donors and patients,
-                        ensuring help is always within reach when needed most.
-                      </p>
-                      <button className="bg-white text-[#f84444] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        Register Now
-                      </button>
+                {/* Dashboard Welcome */}
+                <div className="bg-white rounded-lg shadow p-6 mb-8">
+                  <div className="flex items-center">
+                    <div className="p-3 rounded-full bg-[#c70000] bg-opacity-10 mr-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#c70000]" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                      </svg>
                     </div>
-                    <div className="absolute right-20 top-1/2 -translate-y-1/2">
-                      <div className="w-64 h-64 bg-[#ff5959] rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-32 h-32">
-                          <path d="M12 2.5c0 6.187-9 9.125-9 14.5a9 9 0 0018 0c0-5.375-9-8.313-9-14.5zM12 20a7 7 0 01-7-7c0-3.375 7-6.063 7-10 0 3.938 7 6.625 7 10a7 7 0 01-7 7z" />
-                        </svg>
-                      </div>
+                    <div>
+                      <h1 className="text-2xl font-bold text-gray-800">Welcome to your Dashboard</h1>
+                      <p className="text-gray-600">Track your donations, requests, and upcoming drives all in one place</p>
                     </div>
                   </div>
                 </div>
@@ -158,7 +148,7 @@ function Dashboard({ onSignOut }) {
                   <div className="bg-white rounded-lg shadow p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-lg font-semibold">Blood Requests</h2>
-                      <span className="text-[#f84444]">
+                      <span className="text-[#c70000]">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -167,7 +157,7 @@ function Dashboard({ onSignOut }) {
                     <p className="text-sm text-gray-600 mb-2">Your active requests</p>
                     <div className="text-3xl font-bold mb-4">0</div>
                     <p className="text-sm text-gray-500 mb-4">No active blood requests</p>
-                    <Link to="blood-requests" className="text-[#f84444] text-sm hover:text-red-700">
+                    <Link to="blood-requests" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View all requests →
                     </Link>
                   </div>
@@ -176,7 +166,7 @@ function Dashboard({ onSignOut }) {
                   <div className="bg-white rounded-lg shadow p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-lg font-semibold">Donation Drives</h2>
-                      <span className="text-[#f84444]">
+                      <span className="text-[#c70000]">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -185,7 +175,7 @@ function Dashboard({ onSignOut }) {
                     <p className="text-sm text-gray-600 mb-2">Upcoming drives</p>
                     <div className="text-3xl font-bold mb-4">0</div>
                     <p className="text-sm text-gray-500 mb-4">No upcoming donation drives</p>
-                    <Link to="donation-drives" className="text-[#f84444] text-sm hover:text-red-700">
+                    <Link to="donation-drives" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View all drives →
                     </Link>
                   </div>
@@ -194,7 +184,7 @@ function Dashboard({ onSignOut }) {
                   <div className="bg-white rounded-lg shadow p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-lg font-semibold">Emergency Requests</h2>
-                      <span className="text-[#f84444]">
+                      <span className="text-[#c70000]">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
@@ -203,7 +193,7 @@ function Dashboard({ onSignOut }) {
                     <p className="text-sm text-gray-600 mb-2">Urgent blood needs</p>
                     <div className="text-3xl font-bold mb-4">0</div>
                     <p className="text-sm text-gray-500 mb-4">No emergency requests</p>
-                    <Link to="emergency" className="text-[#f84444] text-sm hover:text-red-700">
+                    <Link to="emergency" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View emergencies →
                     </Link>
                   </div>
@@ -215,7 +205,7 @@ function Dashboard({ onSignOut }) {
                   <div className="bg-white rounded-lg shadow p-6">
                     <h2 className="text-lg font-semibold mb-4">Recent Blood Requests</h2>
                     <p className="text-gray-500 text-sm mb-4">No recent blood requests</p>
-                    <Link to="blood-requests/new" className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-red-600 transition-colors inline-block">
+                    <Link to="blood-requests/new" className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors inline-block">
                       Create Request
                     </Link>
                   </div>
@@ -224,7 +214,7 @@ function Dashboard({ onSignOut }) {
                   <div className="bg-white rounded-lg shadow p-6">
                     <h2 className="text-lg font-semibold mb-4">Upcoming Donation Drives</h2>
                     <p className="text-gray-500 text-sm mb-4">No upcoming donation drives</p>
-                    <Link to="donation-drives/new" className="px-4 py-2 bg-[#f84444] text-white rounded hover:bg-red-600 transition-colors inline-block">
+                    <Link to="donation-drives/new" className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors inline-block">
                       Create Drive
                     </Link>
                   </div>
