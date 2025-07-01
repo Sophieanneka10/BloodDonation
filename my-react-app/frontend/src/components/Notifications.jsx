@@ -13,7 +13,7 @@ function Notifications() {
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f84444]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c70000]"></div>
         </div>
       ) : notifications.length > 0 ? (
         <div className="space-y-4">

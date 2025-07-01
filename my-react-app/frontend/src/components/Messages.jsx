@@ -31,7 +31,7 @@ function Messages() {
                 onChange={e => setTo(e.target.value)}
                 placeholder="Recipient's email"
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -42,13 +42,13 @@ function Messages() {
                 onChange={e => setMessage(e.target.value)}
                 placeholder="Type your message here..."
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="px-6 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+                className="px-6 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
               >
                 Send
               </button>

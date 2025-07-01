@@ -14,7 +14,7 @@ function DonationDrives() {
         </div>
         <Link 
           to="new"
-          className="px-4 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63030] transition-colors duration-200 inline-flex items-center"
+          className="px-4 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000] transition-colors duration-200 inline-flex items-center"
         >
           <span className="mr-2">+</span>
           New Drive
@@ -23,7 +23,7 @@ function DonationDrives() {
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f84444]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c70000]"></div>
         </div>
       ) : drives.length > 0 ? (
         <div className="grid gap-4">
@@ -39,7 +39,7 @@ function DonationDrives() {
           <p className="text-gray-500 text-sm mb-4">There are no upcoming donation drives at the moment.</p>
           <Link 
             to="new"
-            className="px-4 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63030] transition-colors duration-200 inline-flex items-center"
+            className="px-4 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000] transition-colors duration-200 inline-flex items-center"
           >
             Create Drive
           </Link>

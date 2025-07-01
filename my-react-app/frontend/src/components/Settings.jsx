@@ -34,7 +34,7 @@ function Settings() {
                 name="fullName"
                 value={form.fullName}
                 onChange={handleChange}
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -45,7 +45,7 @@ function Settings() {
                 value={form.email}
                 onChange={handleChange}
                 disabled
-                className="w-full border-gray-300 rounded-md bg-gray-100 focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md bg-gray-100 focus:ring-[#c70000] focus:border-[#c70000]"
               />
               <span className="text-xs text-gray-400">Email cannot be changed</span>
             </div>
@@ -56,7 +56,7 @@ function Settings() {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -66,7 +66,7 @@ function Settings() {
                 name="bloodType"
                 value={form.bloodType}
                 onChange={handleChange}
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
           </div>
@@ -77,7 +77,7 @@ function Settings() {
               value={form.address}
               onChange={handleChange}
               rows={2}
-              className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+              className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
             />
           </div>
           <div className="mb-8">
@@ -88,13 +88,13 @@ function Settings() {
               onChange={handleChange}
               rows={2}
               placeholder="List any health conditions that might affect your ability to donate blood"
-              className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+              className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
             />
           </div>
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 rounded-md text-sm font-medium text-white bg-[#f84444] hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+              className="px-6 py-2 rounded-md text-sm font-medium text-white bg-[#c70000] hover:bg-[#a00000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
             >
               Save Changes
             </button>

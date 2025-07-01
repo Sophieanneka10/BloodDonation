@@ -45,7 +45,7 @@ function EmergencyRequest() {
                 value={formData.bloodType}
                 onChange={handleChange}
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               >
                 <option value="">Select blood type</option>
                 <option value="A+">A+</option>
@@ -68,7 +68,7 @@ function EmergencyRequest() {
                 min="1"
                 placeholder="e.g., 2 units"
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -78,7 +78,7 @@ function EmergencyRequest() {
                 value={formData.urgency}
                 onChange={handleChange}
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               >
                 <option value="">Select urgency level</option>
                 <option value="normal">Normal</option>
@@ -95,7 +95,7 @@ function EmergencyRequest() {
                 onChange={handleChange}
                 placeholder="Hospital or clinic name"
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -106,7 +106,7 @@ function EmergencyRequest() {
                 value={formData.neededDate}
                 onChange={handleChange}
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
             <div>
@@ -117,7 +117,7 @@ function EmergencyRequest() {
                 value={formData.neededTime}
                 onChange={handleChange}
                 required
-                className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+                className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
               />
             </div>
           </div>
@@ -131,7 +131,7 @@ function EmergencyRequest() {
               onChange={handleChange}
               placeholder="Briefly describe why the blood is needed"
               required
-              className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+              className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
             />
           </div>
 
@@ -143,7 +143,7 @@ function EmergencyRequest() {
               onChange={handleChange}
               rows={3}
               placeholder="Any additional information that might be helpful"
-              className="w-full border-gray-300 rounded-md focus:ring-[#f84444] focus:border-[#f84444]"
+              className="w-full border-gray-300 rounded-md focus:ring-[#c70000] focus:border-[#c70000]"
             />
           </div>
 
@@ -197,13 +197,13 @@ function EmergencyRequest() {
             <button
               type="button"
               onClick={() => navigate('/dashboard/emergency')}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 rounded-md text-sm font-medium text-white bg-[#f84444] hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+              className="px-6 py-2 rounded-md text-sm font-medium text-white bg-[#c70000] hover:bg-[#a00000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
             >
               Create Blood Request
             </button>

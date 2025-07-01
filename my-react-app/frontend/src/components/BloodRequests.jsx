@@ -31,7 +31,7 @@ function BloodRequests() {
     <div className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start">
         <div className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-[#f84444]">{request.bloodType}</span>
+          <span className="text-2xl font-bold text-[#c70000]">{request.bloodType}</span>
           <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
             {request.urgency}
           </span>
@@ -58,7 +58,7 @@ function BloodRequests() {
         <h1 className="text-2xl font-semibold">Blood Requests</h1>
         <button
           onClick={() => navigate('/dashboard/blood-requests/new')}
-          className="flex items-center px-4 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63a3a]"
+          className="flex items-center px-4 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000]"
         >
           <span className="mr-1">+</span>
           New Request
@@ -72,7 +72,7 @@ function BloodRequests() {
             onClick={() => setActiveTab('all')}
             className={`mr-8 py-4 text-sm font-medium ${
               activeTab === 'all'
-                ? 'text-[#f84444] border-b-2 border-[#f84444]'
+                ? 'text-[#c70000] border-b-2 border-[#c70000]'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -82,7 +82,7 @@ function BloodRequests() {
             onClick={() => setActiveTab('my')}
             className={`py-4 text-sm font-medium ${
               activeTab === 'my'
-                ? 'text-[#f84444] border-b-2 border-[#f84444]'
+                ? 'text-[#c70000] border-b-2 border-[#c70000]'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -94,7 +94,7 @@ function BloodRequests() {
       {/* Content */}
       {loading ? (
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#f84444] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#c70000] mx-auto"></div>
           <p className="mt-2 text-gray-500">Loading requests...</p>
         </div>
       ) : requests.length === 0 ? (
@@ -105,7 +105,7 @@ function BloodRequests() {
           </p>
           <button
             onClick={() => navigate('/dashboard/blood-requests/new')}
-            className="mt-6 px-6 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63a3a]"
+            className="mt-6 px-6 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000]"
           >
             Create Request
           </button>

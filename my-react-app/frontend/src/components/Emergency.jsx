@@ -29,7 +29,7 @@ function Emergency() {
         <p className="text-gray-500 mb-6">There are no emergency blood requests at the moment.</p>
         <button
           onClick={() => setShowForm(true)}
-          className="px-6 py-2 bg-[#f84444] text-white rounded-md hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+          className="px-6 py-2 bg-[#c70000] text-white rounded-md hover:bg-[#a00000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
         >
           Create Blood Request
         </button>

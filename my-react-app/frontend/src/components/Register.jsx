@@ -101,7 +101,7 @@ function Register() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                   />
                 </div>
               </div>
@@ -118,7 +118,7 @@ function Register() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                   />
                 </div>
               </div>
@@ -137,7 +137,7 @@ function Register() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -154,7 +154,7 @@ function Register() {
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -170,7 +170,7 @@ function Register() {
                   required
                   value={formData.bloodType}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 >
                   <option value="">Select blood type</option>
                   <option value="A+">A+</option>
@@ -196,7 +196,7 @@ function Register() {
                   required
                   value={formData.address}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -214,7 +214,7 @@ function Register() {
                       type="checkbox"
                       checked={formData.availableDays.includes(day)}
                       onChange={handleDayChange}
-                      className="h-4 w-4 text-[#f84444] focus:ring-[#f84444] border-gray-300 rounded"
+                      className="h-4 w-4 text-[#c70000] focus:ring-[#c70000] border-gray-300 rounded"
                     />
                     <label htmlFor={day} className="ml-2 block text-sm text-gray-700">
                       {day}
@@ -236,7 +236,7 @@ function Register() {
                   placeholder="List any health conditions or medications (optional)"
                   value={formData.healthConditions}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ function Register() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -270,7 +270,7 @@ function Register() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f84444] focus:border-[#f84444] sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#c70000] focus:border-[#c70000] sm:text-sm"
                 />
               </div>
             </div>
@@ -278,7 +278,7 @@ function Register() {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#f84444] hover:bg-[#d63a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f84444]"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#c70000] hover:bg-[#a00000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c70000]"
               >
                 Register
               </button>
