@@ -1,23 +1,32 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { bloodRequestAPI } from '../services/api';
 
 function CreateBloodRequest() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     bloodType: '',
     units: 1,
-    urgency: 'normal',
+    urgency: 'NORMAL',
     hospital: '',
-    patientName: '',
-    contactNumber: '',
-    additionalInfo: ''
+    notes: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    // For now, just navigate back to blood requests
-    navigate('/dashboard/blood-requests');
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await bloodRequestAPI.createRequest(formData);
+      navigate('/dashboard/blood-requests');
+    } catch (err) {
+      console.error('Error creating blood request:', err);
+      setError(err.response?.data?.message || 'Failed to create blood request. Please try again.');
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {

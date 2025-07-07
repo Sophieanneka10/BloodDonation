@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+// For debugging purposes
+import axios from 'axios';
 
 function Register() {
   const navigate = useNavigate();
+  const { register, currentUser } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [backendStatus, setBackendStatus] = useState('Unknown');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,16 +22,113 @@ function Register() {
     address: '',
     healthConditions: '',
     availableDays: [],
+    roles: ['user'] // Must match case in backend's AuthController switch statement
   });
 
-  const handleSubmit = (event) => {
+  // If user is already logged in, redirect to dashboard
+  if (currentUser) {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  // Function to test backend connectivity
+  const testBackendConnection = async () => {
+    try {
+      setBackendStatus('Testing connection...');
+      // Testing connection with OPTIONS request which should be permitted by CORS
+      const response = await axios({
+        method: 'OPTIONS',
+        url: 'http://localhost:8081/api/auth/signup',
+        headers: {
+          'Access-Control-Request-Method': 'POST',
+          'Access-Control-Request-Headers': 'content-type'
+        }
+      });
+      setBackendStatus(`Connected! Status: ${response.status}`);
+      console.log('Backend connection successful');
+      return true;
+    } catch (err) {
+      console.error('Backend connection test failed:', err);
+      if (err.code === 'ERR_NETWORK') {
+        setBackendStatus('Backend server is not running - please start the server');
+      } else {
+        setBackendStatus(`Failed to connect: ${err.status || err.message}`);
+      }
+      return false;
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError('');
+    
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
       return;
     }
-    // In a real app, this would make an API call to register the user
-    navigate('/signin');
+    
+    // Debug the data being sent
+    console.log('Sending registration data:', {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      bloodType: formData.bloodType,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      healthConditions: formData.healthConditions,
+      availableDays: formData.availableDays,
+      roles: formData.roles
+    });
+    
+    try {
+      // Format the data to match exactly what the backend expects
+      const userData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        bloodType: formData.bloodType,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+        healthConditions: formData.healthConditions,
+        availableDays: formData.availableDays,
+        // Backend expects roles as a simple array, not a Set
+        roles: formData.roles
+      };
+      
+      console.log('Attempting to register user...');
+      const result = await register(userData);
+      console.log('Registration result:', result);
+      
+      if (result.success) {
+        setSuccess(true);
+        console.log('Registration successful, redirecting to signin page');
+        // Redirect to login after successful registration
+        navigate('/signin');
+      } else {
+        console.error('Registration failed:', result.error);
+        setError(result.error || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Registration error details:', err);
+      console.error('Error message:', err.message);
+      if (err.response) {
+        console.error('Response data:', err.response.data);
+        console.error('Response status:', err.response.status);
+        console.error('Response headers:', err.response.headers);
+        setError(`Server error: ${err.response.data.message || err.response.statusText || 'Unknown error'}`);
+      } else if (err.request) {
+        console.error('Request made but no response received:', err.request);
+        setError('No response received from server. Please try again later.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (event) => {
@@ -33,17 +137,23 @@ function Register() {
       ...prev,
       [name]: value,
     }));
-    setError('');
   };
 
   const handleDayChange = (event) => {
     const { name, checked } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      availableDays: checked
-        ? [...prev.availableDays, name]
-        : prev.availableDays.filter((day) => day !== name),
-    }));
+    setFormData((prev) => {
+      if (checked) {
+        return {
+          ...prev,
+          availableDays: [...prev.availableDays, name],
+        };
+      } else {
+        return {
+          ...prev,
+          availableDays: prev.availableDays.filter(day => day !== name),
+        };
+      }
+    });
   };
 
   const daysOfWeek = [
@@ -79,11 +189,38 @@ function Register() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Backend connection test button */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Backend Status: 
+                <span className={`font-medium ${backendStatus.includes('not running') ? 'text-red-600' : 'text-blue-600'}`}>
+                  {backendStatus}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={testBackendConnection}
+                className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Test Connection
+              </button>
+            </div>
+          </div>
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
               <div className="rounded-md bg-red-50 p-4">
                 <div className="text-sm text-red-700">
                   {error}
+                </div>
+              </div>
+            )}
+            
+            {/* Show success message if registration succeeded */}
+            {success && (
+              <div className="rounded-md bg-green-50 p-4">
+                <div className="text-sm text-green-700">
+                  Registration successful! Redirecting to login...
                 </div>
               </div>
             )}

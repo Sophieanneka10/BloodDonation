@@ -1,12 +1,66 @@
-# React + Vite
+# RedWeb Blood Donation Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application for managing blood donations, requests, and donation drives. This application connects blood donors with those in need and helps organize blood donation events.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This repository is organized as a monorepo with two main directories:
 
-## Expanding the ESLint configuration
+- `frontend/` - React-based web interface
+- `backend/` - Spring Boot API server
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technologies Used
+
+### Frontend
+- React 19 with Hooks
+- React Router for navigation
+- Tailwind CSS for styling
+- Axios for API communication
+- Vite for build tooling
+
+### Backend
+- Java 17
+- Spring Boot 3.2.2
+- Spring Security with JWT Authentication
+- Spring Data JPA
+- MySQL Database
+- Gradle Build System
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ and npm for the frontend
+- Java JDK 17+ for the backend
+- WAMP/XAMPP with MySQL for the database
+
+### Setup and Running
+
+#### Database
+1. Start your WAMP/XAMPP server
+2. Make sure MySQL is running on the default port (3306)
+3. The backend will automatically create the `redwebdb` database if it doesn't exist
+
+#### Backend
+1. Navigate to the backend directory: `cd backend`
+2. Build the project: `./gradlew build`
+3. Run the server: `./gradlew bootRun`
+4. The API will be available at http://localhost:8081/api
+
+#### Frontend
+1. Navigate to the frontend directory: `cd frontend`
+2. Install dependencies: `npm install`
+3. Run the development server: `npm run dev`
+4. The frontend will be available at http://localhost:5173
+
+## Features
+
+- User authentication (sign up, sign in)
+- Blood donation request management
+- Donation drive organization
+- Real-time notifications
+- Emergency blood requests
+- Dashboard with statistics
+
+## License
+
+This project is available under the MIT License.

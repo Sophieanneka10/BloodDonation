@@ -1,21 +1,38 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-function SignIn({ onSignIn }) {
+function SignIn() {
   const navigate = useNavigate();
+  const { login, currentUser, error: authError } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
-  const handleSubmit = (event) => {
+  // If user is already logged in, redirect to dashboard
+  if (currentUser) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@redweb.com' && formData.password === 'password123') {
-      onSignIn();
-      navigate('/dashboard');
-    } else {
-      setError('Invalid credentials. Use admin@redweb.com / password123');
+    setLoading(true);
+    setError('');
+    
+    try {
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setError(result.error || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 

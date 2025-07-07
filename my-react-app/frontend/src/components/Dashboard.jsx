@@ -1,15 +1,61 @@
-import { useState } from 'react';
-import { Link, Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import BloodRequests from './BloodRequests';
 import CreateBloodRequest from './CreateBloodRequest';
+import BloodRequestDetails from './BloodRequestDetails';
 import DonationDrives from './DonationDrives';
+import CreateDonationDrive from './CreateDonationDrive';
+import DriveRegistrations from './DriveRegistrations';
+import RequestResponders from './RequestResponders';
 import Notifications from './Notifications';
 import Emergency from './Emergency';
 import Messages from './Messages';
 import Settings from './Settings';
+import DonationHistory from './DonationHistory';
+import { useAuth } from '../context/AuthContext';
+import { bloodRequestAPI } from '../services/api';
 
-function Dashboard({ onSignOut }) {
+function Dashboard() {
   const location = useLocation();
+  const { currentUser, logout } = useAuth();
+  const [dashboardStats, setDashboardStats] = useState({
+    activeRequests: 0,
+    upcomingDrives: 0,
+    emergencyRequests: 0
+  });
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Fetch dashboard statistics
+    const fetchDashboardStats = async () => {
+      try {
+        const response = await bloodRequestAPI.getStatistics();
+        if (response.data) {
+          setDashboardStats({
+            activeRequests: response.data.activeRequests || 0,
+            upcomingDrives: response.data.upcomingDrives || 0,
+            emergencyRequests: response.data.emergencyRequests || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchDashboardStats();
+  }, []);
+  
+  // If user is not logged in, redirect to signin page
+  if (!currentUser) {
+    return <Navigate to="/signin" />;
+  }
+  
+  const handleSignOut = async () => {
+    await logout();
+  };
+  
   const menuItems = [
     { name: 'Overview', href: '', icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -83,7 +129,7 @@ function Dashboard({ onSignOut }) {
               Contact our support team for assistance with the platform.
             </p>
             <button
-              onClick={() => onSignOut()}
+              onClick={handleSignOut}
               className="mt-4 text-sm text-gray-600 hover:text-gray-900"
             >
               Get Support
@@ -113,12 +159,17 @@ function Dashboard({ onSignOut }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                 </Link>
-                <button
-                  onClick={onSignOut}
-                  className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors duration-200"
-                >
-                  Sign Out
-                </button>
+                <div className="flex items-center">
+                  <span className="text-gray-700 mr-4">
+                    Hello, {currentUser?.firstName || 'User'}
+                  </span>
+                  <button
+                    onClick={handleSignOut}
+                    className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors duration-200"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               </div>
             </div>
           </header>
@@ -155,8 +206,12 @@ function Dashboard({ onSignOut }) {
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-2">Your active requests</p>
-                    <div className="text-3xl font-bold mb-4">0</div>
-                    <p className="text-sm text-gray-500 mb-4">No active blood requests</p>
+                    <div className="text-3xl font-bold mb-4">{loading ? '...' : dashboardStats.activeRequests}</div>
+                    <p className="text-sm text-gray-500 mb-4">
+                      {loading ? 'Loading...' : 
+                       dashboardStats.activeRequests === 0 ? 'No active blood requests' : 
+                       `${dashboardStats.activeRequests} active request${dashboardStats.activeRequests !== 1 ? 's' : ''}`}
+                    </p>
                     <Link to="blood-requests" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View all requests →
                     </Link>
@@ -173,8 +228,12 @@ function Dashboard({ onSignOut }) {
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-2">Upcoming drives</p>
-                    <div className="text-3xl font-bold mb-4">0</div>
-                    <p className="text-sm text-gray-500 mb-4">No upcoming donation drives</p>
+                    <div className="text-3xl font-bold mb-4">{loading ? '...' : dashboardStats.upcomingDrives}</div>
+                    <p className="text-sm text-gray-500 mb-4">
+                      {loading ? 'Loading...' : 
+                       dashboardStats.upcomingDrives === 0 ? 'No upcoming donation drives' : 
+                       `${dashboardStats.upcomingDrives} upcoming drive${dashboardStats.upcomingDrives !== 1 ? 's' : ''}`}
+                    </p>
                     <Link to="donation-drives" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View all drives →
                     </Link>
@@ -191,8 +250,12 @@ function Dashboard({ onSignOut }) {
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-2">Urgent blood needs</p>
-                    <div className="text-3xl font-bold mb-4">0</div>
-                    <p className="text-sm text-gray-500 mb-4">No emergency requests</p>
+                    <div className="text-3xl font-bold mb-4">{loading ? '...' : dashboardStats.emergencyRequests}</div>
+                    <p className="text-sm text-gray-500 mb-4">
+                      {loading ? 'Loading...' : 
+                       dashboardStats.emergencyRequests === 0 ? 'No emergency requests' : 
+                       `${dashboardStats.emergencyRequests} emergency request${dashboardStats.emergencyRequests !== 1 ? 's' : ''}`}
+                    </p>
                     <Link to="emergency" className="text-[#c70000] text-sm hover:text-[#a00000]">
                       View emergencies →
                     </Link>
@@ -223,9 +286,12 @@ function Dashboard({ onSignOut }) {
             } />
             <Route path="blood-requests" element={<BloodRequests />} />
             <Route path="blood-requests/new" element={<CreateBloodRequest />} />
+            <Route path="blood-requests/:id" element={<BloodRequestDetails />} />
+            <Route path="blood-requests/:id/responders" element={<RequestResponders />} />
             <Route path="donation-drives" element={<DonationDrives />} />
-            <Route path="donation-drives/new" element={<div>Create Drive</div>} />
-            <Route path="donation-history" element={<div>Donation History</div>} />
+            <Route path="donation-drives/new" element={<CreateDonationDrive />} />
+            <Route path="donation-drives/:id/registrations" element={<DriveRegistrations />} />
+            <Route path="donation-history" element={<DonationHistory />} />
             <Route path="messages" element={<Messages />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="emergency" element={<Emergency />} />
