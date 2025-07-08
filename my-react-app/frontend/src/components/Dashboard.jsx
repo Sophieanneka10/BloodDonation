@@ -5,6 +5,7 @@ import CreateBloodRequest from './CreateBloodRequest';
 import BloodRequestDetails from './BloodRequestDetails';
 import DonationDrives from './DonationDrives';
 import CreateDonationDrive from './CreateDonationDrive';
+import DonationDriveDetails from './DonationDriveDetails';
 import DriveRegistrations from './DriveRegistrations';
 import RequestResponders from './RequestResponders';
 import Notifications from './Notifications';
@@ -13,7 +14,7 @@ import Messages from './Messages';
 import Settings from './Settings';
 import DonationHistory from './DonationHistory';
 import { useAuth } from '../context/AuthContext';
-import { bloodRequestAPI } from '../services/api';
+import { bloodRequestAPI, donationDriveAPI } from '../services/api';
 
 function Dashboard() {
   const location = useLocation();
@@ -24,6 +25,10 @@ function Dashboard() {
     emergencyRequests: 0
   });
   const [loading, setLoading] = useState(true);
+  const [recentRequests, setRecentRequests] = useState([]);
+  const [upcomingDrives, setUpcomingDrives] = useState([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
+  const [loadingDrives, setLoadingDrives] = useState(true);
   
   useEffect(() => {
     // Fetch dashboard statistics
@@ -44,7 +49,68 @@ function Dashboard() {
       }
     };
     
+    // Fetch recent blood requests
+    const fetchRecentRequests = async () => {
+      try {
+        console.log('Fetching recent blood requests...');
+        setLoadingRequests(true);
+        const response = await bloodRequestAPI.getAllRequests();
+        console.log('Blood requests API response:', response);
+        if (response && response.length > 0) {
+          // Sort by date and take the 3 most recent
+          const sortedRequests = response
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 3);
+          console.log('Processed blood requests:', sortedRequests);
+          setRecentRequests(sortedRequests);
+        } else {
+          console.log('No blood requests data found in response');
+          setRecentRequests([]);
+        }
+      } catch (error) {
+        console.error('Error fetching recent requests:', error);
+        setRecentRequests([]);
+      } finally {
+        setLoadingRequests(false);
+      }
+    };
+
+    // Fetch upcoming donation drives
+    const fetchUpcomingDrives = async () => {
+      try {
+        console.log('Fetching upcoming donation drives...');
+        setLoadingDrives(true);
+        const response = await donationDriveAPI.getAllDrives();
+        console.log('Donation drives API response:', response);
+        if (response && response.length > 0) {
+          // Filter upcoming drives (date is in the future) and take the 3 most recent
+          const today = new Date();
+          console.log('Current date for filtering:', today);
+          const upcomingDrives = response
+            .filter(drive => {
+              const driveDate = new Date(drive.date);
+              console.log(`Drive ${drive.id} date: ${driveDate}, is future: ${driveDate > today}`);
+              return driveDate > today;
+            })
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .slice(0, 3);
+          console.log('Processed upcoming drives:', upcomingDrives);
+          setUpcomingDrives(upcomingDrives);
+        } else {
+          console.log('No donation drives data found in response');
+          setUpcomingDrives([]);
+        }
+      } catch (error) {
+        console.error('Error fetching upcoming drives:', error);
+        setUpcomingDrives([]);
+      } finally {
+        setLoadingDrives(false);
+      }
+    };
+    
     fetchDashboardStats();
+    fetchRecentRequests();
+    fetchUpcomingDrives();
   }, []);
   
   // If user is not logged in, redirect to signin page
@@ -125,19 +191,16 @@ function Dashboard() {
             <Link to="help" className="block text-sm text-gray-600 hover:text-gray-900">
               Need Help?
             </Link>
-            <p className="mt-1 text-xs text-gray-500">
-              Contact our support team for assistance with the platform.
-            </p>
             <button
               onClick={handleSignOut}
-              className="mt-4 text-sm text-gray-600 hover:text-gray-900"
+              className="mt-4 w-full px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors duration-200"
             >
-              Get Support
+              Sign Out
             </button>
           </div>
         </div>
-
-        {/* Main content */}
+        
+        {/* Main content area */}
         <div className="flex-1">
           {/* Header */}
           <header className="bg-white border-b border-gray-200 p-4">
@@ -163,6 +226,12 @@ function Dashboard() {
                   <span className="text-gray-700 mr-4">
                     Hello, {currentUser?.firstName || 'User'}
                   </span>
+                  <Link
+                    to="settings"
+                    className="px-4 py-2 mr-2 border border-[#c70000] text-[#c70000] rounded hover:bg-red-50 transition-colors duration-200"
+                  >
+                    Edit Profile
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors duration-200"
@@ -267,7 +336,39 @@ function Dashboard() {
                   {/* Recent Blood Requests */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h2 className="text-lg font-semibold mb-4">Recent Blood Requests</h2>
-                    <p className="text-gray-500 text-sm mb-4">No recent blood requests</p>
+                    {loadingRequests ? (
+                      <div className="flex justify-center my-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#c70000]"></div>
+                      </div>
+                    ) : recentRequests.length > 0 ? (
+                      <div className="space-y-4 mb-4">
+                        {recentRequests.map(request => (
+                          <div key={request.id} className="border-b pb-3 last:border-b-0 last:pb-0">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <div className="font-medium">
+                                  Blood Type: <span className="font-bold text-[#c70000]">{request.bloodType}</span>
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {request.urgency} urgency • {request.unitsNeeded} units needed
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                  Posted {new Date(request.createdAt).toLocaleDateString()}
+                                </div>
+                              </div>
+                              <Link 
+                                to={`/blood-requests/${request.id}`} 
+                                className="text-sm text-[#c70000] hover:underline"
+                              >
+                                View Details
+                              </Link>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 text-sm mb-4">No recent blood requests</p>
+                    )}
                     <Link to="blood-requests/new" className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors inline-block">
                       Create Request
                     </Link>
@@ -276,7 +377,37 @@ function Dashboard() {
                   {/* Upcoming Donation Drives */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h2 className="text-lg font-semibold mb-4">Upcoming Donation Drives</h2>
-                    <p className="text-gray-500 text-sm mb-4">No upcoming donation drives</p>
+                    {loadingDrives ? (
+                      <div className="flex justify-center my-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#c70000]"></div>
+                      </div>
+                    ) : upcomingDrives.length > 0 ? (
+                      <div className="space-y-4 mb-4">
+                        {upcomingDrives.map(drive => (
+                          <div key={drive.id} className="border-b pb-3 last:border-b-0 last:pb-0">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <div className="font-medium">{drive.name}</div>
+                                <div className="text-sm text-gray-600">
+                                  {new Date(drive.date).toLocaleDateString()} • {drive.location}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                  Capacity: {drive.capacity || 'Unlimited'}
+                                </div>
+                              </div>
+                              <Link 
+                                to={`/donation-drives/${drive.id}`} 
+                                className="text-sm text-[#c70000] hover:underline"
+                              >
+                                View Details
+                              </Link>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 text-sm mb-4">No upcoming donation drives</p>
+                    )}
                     <Link to="donation-drives/new" className="px-4 py-2 bg-[#c70000] text-white rounded hover:bg-[#a00000] transition-colors inline-block">
                       Create Drive
                     </Link>
@@ -290,6 +421,7 @@ function Dashboard() {
             <Route path="blood-requests/:id/responders" element={<RequestResponders />} />
             <Route path="donation-drives" element={<DonationDrives />} />
             <Route path="donation-drives/new" element={<CreateDonationDrive />} />
+            <Route path="donation-drives/:id" element={<DonationDriveDetails />} />
             <Route path="donation-drives/:id/registrations" element={<DriveRegistrations />} />
             <Route path="donation-history" element={<DonationHistory />} />
             <Route path="messages" element={<Messages />} />

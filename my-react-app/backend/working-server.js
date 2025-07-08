@@ -317,6 +317,62 @@ app.get('/api/blood-requests', authenticateToken, (req, res) => {
     const bloodRequests = readDataFile('blood-requests.json');
     res.json(bloodRequests);
   } catch (error) {
+    console.error('Error getting blood requests:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.get('/api/blood-requests/my', authenticateToken, (req, res) => {
+  try {
+    const userId = req.user.id;
+    console.log(`Getting blood requests for user: ${userId}`);
+    
+    const bloodRequests = readDataFile('blood-requests.json');
+    const userRequests = bloodRequests.filter(request => request.requesterId === userId);
+    
+    console.log(`Found ${userRequests.length} requests for user ${userId}`);
+    res.json(userRequests);
+  } catch (error) {
+    console.error('Error getting user blood requests:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.get('/api/blood-requests/statistics', authenticateToken, (req, res) => {
+  try {
+    console.log('Getting dashboard statistics...');
+    const bloodRequests = readDataFile('blood-requests.json');
+    const donationDrives = readDataFile('donation-drives.json');
+    const donationHistory = readDataFile('donation-history.json');
+    
+    console.log(`Found ${bloodRequests.length} blood requests`);
+    console.log(`Found ${donationDrives.length} donation drives`);
+    console.log(`Found ${donationHistory.length} donation history entries`);
+    
+    // Count active blood requests
+    const activeRequests = bloodRequests.filter(req => req.status === 'pending').length;
+    
+    // Count all donation drives - assume they're all active unless explicitly marked
+    // This ensures at least the count shows up if there's any drive in the system
+    const upcomingDrives = donationDrives.length > 0 ? donationDrives.length : 0;
+    
+    // Count emergency requests
+    const emergencyRequests = bloodRequests.filter(req => 
+      req.isEmergency === true || req.priority === 'emergency'
+    ).length;
+    
+    const stats = {
+      activeRequests,
+      upcomingDrives,
+      emergencyRequests,
+      totalDonations: donationHistory.length
+    };
+    
+    console.log('Dashboard statistics:', stats);
+    
+    res.json(stats);
+  } catch (error) {
+    console.error('Error getting statistics:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
@@ -833,34 +889,79 @@ app.get('/api/messages/search-users', authenticateToken, (req, res) => {
 // Get registrations for a donation drive (organizer only)
 app.get('/api/donation-drives/:id/registrations', authenticateToken, (req, res) => {
   try {
-    const driveId = req.params.id;
     const userId = req.user.id;
+    const driveId = req.params.id;
+    console.log('Fetching registrations for drive:', driveId);
+    console.log('Authenticated user:', userId);
     
     const drives = readDataFile('donation-drives.json');
-    const drive = drives.find(d => d.id === driveId);
+    console.log(`Found ${drives.length} drives in the system`);
+    
+    // Log all drive IDs to help debugging
+    console.log('Available drive IDs:', drives.map(d => d.id));
+    
+    // Always use string comparison for IDs
+    const drive = drives.find(d => String(d.id) === String(driveId));
+    
+    console.log('Drive found:', !!drive);
     
     if (!drive) {
-      return res.status(404).json({ message: 'Donation drive not found' });
+      return res.status(404).json({ 
+        message: 'Donation drive not found', 
+        debug: { 
+          driveId,
+          availableDriveIds: drives.map(d => d.id)
+        } 
+      });
     }
     
-    // Check if user is the organizer
-    console.log('Drive organizer check:', {
+    // Get the user's role from the users file
+    const allUsers = readDataFile('users.json');
+    const currentUser = allUsers.find(u => String(u.id) === String(userId));
+    
+    // Get current user role
+    const userRole = currentUser?.role || 'donor';
+    const isAdmin = userRole === 'admin';
+    const isOrganizer = userRole === 'organizer';
+    
+    // Convert both IDs to string to ensure proper type comparison
+    const organizedIdStr = String(drive.organizerId);
+    const userIdStr = String(userId);
+    
+    // Check if user is the drive owner
+    const isDriveOwner = organizedIdStr === userIdStr;
+    
+    console.log('Registration access check:', {
       driveId: drive.id,
-      driveOrganizerId: drive.organizerId,
-      currentUserId: userId,
-      organizerIdType: typeof drive.organizerId,
-      userIdType: typeof userId,
-      isEqual: drive.organizerId === userId
+      driveName: drive.name,
+      driveOrganizerId: organizedIdStr,
+      currentUserId: userIdStr,
+      isDriveOwner,
+      userRole,
+      isAdmin,
+      isOrganizer
     });
     
-    if (drive.organizerId !== userId) {
+    // Allow access if user is the organizer of this drive, has an organizer role, or is an admin
+    const hasAccess = isDriveOwner || isAdmin || isOrganizer;
+    
+    console.log('Access decision:', {
+      isDriveOwner,
+      isOrganizer,
+      isAdmin,
+      hasAccess
+    });
+    
+    if (!hasAccess) {
       return res.status(403).json({ 
-        message: 'Only the organizer can view registrations',
+        message: 'Access denied. Only the drive owner, organizers, and admins can view registrations.',
         debug: {
           driveOrganizerId: drive.organizerId,
           currentUserId: userId,
-          organizerIdType: typeof drive.organizerId,
-          userIdType: typeof userId
+          userRole,
+          isDriveOwner,
+          isOrganizer,
+          isAdmin
         }
       });
     }

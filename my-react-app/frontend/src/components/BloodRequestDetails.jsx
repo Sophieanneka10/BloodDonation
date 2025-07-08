@@ -24,13 +24,16 @@ function BloodRequestDetails() {
       setLoading(true);
       try {
         const response = await bloodRequestAPI.getRequestById(id);
-        setRequest(response.data);
+        console.log('Blood request details response:', response);
+        // Handle both direct data and response.data formats
+        const requestData = response.data || response;
+        setRequest(requestData);
         setEditForm({
-          bloodType: response.data.bloodType,
-          units: response.data.units,
-          urgency: response.data.urgency,
-          hospital: response.data.hospital,
-          notes: response.data.notes || ''
+          bloodType: requestData.bloodType,
+          units: requestData.units,
+          urgency: requestData.urgency,
+          hospital: requestData.hospital,
+          notes: requestData.notes || ''
         });
         setLoading(false);
       } catch (err) {
